@@ -1,3 +1,4 @@
-import './style.css'
+import './style.css';
+import display from './render.js';
 
-console.log("test");
+display.init();

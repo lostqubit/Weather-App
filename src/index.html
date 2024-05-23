@@ -6,6 +6,19 @@
     <title>Weather</title>
 </head>
 <body>
-    
+    <header>
+        <div><img src ="<%=require('./icons/weather.png')%>"><span>Weather</span></div>
+        <form id="search">
+            <input type="text" name="search-query" placeholder="Search Location">
+            <button form="search"><img src="<%=require('./icons/search.svg')%>"></button>
+        </form>
+        <div>
+            <div><sup>&deg</sup>C, m/s</div>
+            <div><sup>&deg</sup>F, mph</div>
+        </div>
+    </header>
+    <div id="content-body">
+
+    </div>
 </body>
 </html>

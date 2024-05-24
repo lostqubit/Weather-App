@@ -356,9 +356,17 @@ const display = (() => {
         button.addEventListener("click", async () => {
             loadAnimation();
             const data = await dataLoader.getCurrentForecast(query,units);
-            if(data.error){
+            if(data===-1){
                 stopAnimation();
-                console.log("API down! Please Try Again");
+                loadError("City not found! Please check spelling and try again with proper spacing");
+            }
+            else if(data===-2){
+                stopAnimation();
+                loadError("Something went wrong! Please try again.")
+            }
+            else if(data.error){
+                stopAnimation();
+                loadError("API down! Please Try Again");
             }
             else{
                 const {heading1,currentContent,forecastContent} = renderForecast(data.currentWeather, data.forecast,units);
@@ -368,6 +376,13 @@ const display = (() => {
                 container.appendChild(forecastContent);
             }
         });
+    };
+
+    const loadError = (errorStatement) => {
+        const heading = document.createElement("h2");
+        heading.classList.add("error");
+        heading.innerText = errorStatement;
+        container.appendChild(heading);
     };
 
     const init = async () => {
@@ -387,9 +402,17 @@ const display = (() => {
                     loadAnimation();
                     units = "metric";
                     const data = await dataLoader.getCurrentForecast(searchQuery,units);
-                    if(data.error){
+                    if(data===-1){
                         stopAnimation();
-                        console.log("API down! Please Try Again");
+                        loadError("City not found! Please check spelling and try again with proper spacing.");
+                    }
+                    else if(data===-2){
+                        stopAnimation();
+                        loadError("Something went wrong! Please try again.")
+                    }
+                    else if(data.error){
+                        stopAnimation();
+                        loadError("API down! Please Try Again.");
                     }
                     else{
                         const {heading1,currentContent,forecastContent} = renderForecast(data.currentWeather, data.forecast, units);
@@ -413,9 +436,17 @@ const display = (() => {
                     loadAnimation();
                     units = "imperial";
                     const data = await dataLoader.getCurrentForecast(searchQuery,units);
-                    if(data.error){
+                    if(data===-1){
                         stopAnimation();
-                        console.log("API down! Please Try Again");
+                        loadError("City not found! Please check spelling and try again with proper spacing.");
+                    }
+                    else if(data===-2){
+                        stopAnimation();
+                        loadError("Something went wrong! Please try again.")
+                    }
+                    else if(data.error){
+                        stopAnimation();
+                        loadError("API down! Please Try Again.");
                     }
                     else{
                         const {heading1,currentContent,forecastContent} = renderForecast(data.currentWeather, data.forecast, units);
@@ -427,7 +458,7 @@ const display = (() => {
                     }
                 }
             }
-            else units = "metric";
+            else units = "imperial";
         })
 
         form.addEventListener("submit", async (event) => {
@@ -437,9 +468,17 @@ const display = (() => {
             const query = formdata.get("search-query");
             const data = await dataLoader.getCurrentForecast(query,units);
             searchQuery = query;
-            if(data.error){
+            if(data===-1){
                 stopAnimation();
-                console.log("API down! Please Try Again");
+                loadError("City not found! Please check spelling and try again with proper spacing.");
+            }
+            else if(data===-2){
+                stopAnimation();
+                loadError("Something went wrong! Please try again.")
+            }
+            else if(data.error){
+                stopAnimation();
+                loadError("API down! Please Try Again.");
             }
             else{
                 const {heading1,currentContent,forecastContent} = renderForecast(data.currentWeather, data.forecast,units);
@@ -453,13 +492,27 @@ const display = (() => {
         });
 
         const data = await dataLoader.getCurrentForecast("New Delhi",units);
-        const {heading1,currentContent,forecastContent} = renderForecast(data.currentWeather, data.forecast,units);
         
-        stopAnimation();
-        container.appendChild(heading1);
-        container.appendChild(currentContent);
-        container.appendChild(forecastContent);
-        addReload(searchQuery,units);
+        if(data===-1){
+            stopAnimation();
+            loadError("City not found! Please check spelling and try again with proper spacing.");
+        }
+        else if(data===-2){
+            stopAnimation();
+            loadError("Something went wrong! Please try again.")
+        }
+        else if(data.error){
+            stopAnimation();
+            loadError("API down! Please Try Again.");
+        }
+        else{
+            const {heading1,currentContent,forecastContent} = renderForecast(data.currentWeather, data.forecast,units);
+            stopAnimation();
+            container.appendChild(heading1);
+            container.appendChild(currentContent);
+            container.appendChild(forecastContent);
+            addReload(searchQuery,units);
+        }
     }
 
     return {init};

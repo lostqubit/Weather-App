@@ -349,5 +349,9 @@ header>div:last-child>div:first-child{
     padding-top: 10px;
 }
 
+.error{
+    color:#dee2e6;
+    font-weight: 500;
+}
 
 

@@ -14,7 +14,7 @@ const dataLoader = (() => {
             
             if(!cityDetails.length){
                 console.log("City Not Found!");
-                return null;
+                return -1;
             }
     
             const lat = cityDetails[0].lat;
@@ -27,7 +27,7 @@ const dataLoader = (() => {
 
             if(!currentData.weather.length){
                 console.log("Something went wrong");
-                return null;
+                return -2;
             }
 
             const response3 = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=${units}`);
@@ -35,7 +35,7 @@ const dataLoader = (() => {
     
             if(!data.cnt){
                 console.log("Something went wrong");
-                return null;
+                return -2;
             }
     
             const timeOffset = data.city.timezone;

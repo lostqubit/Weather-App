@@ -9,7 +9,7 @@ const dataLoader = (() => {
         const forecast = [];
 
         try{
-            const response1 = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${API_KEY}`);
+            const response1 = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${API_KEY}`,{mode: 'cors'});
             const cityDetails = await response1.json();
             
             if(!cityDetails.length){
@@ -22,7 +22,7 @@ const dataLoader = (() => {
             const city = cityDetails[0].name;
             const country = cityDetails[0].country;
             
-            const response2 = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=${units}`);
+            const response2 = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=${units}`,{mode: 'cors'});
             const currentData = await response2.json();
 
             if(!currentData.weather.length){
@@ -30,7 +30,7 @@ const dataLoader = (() => {
                 return -2;
             }
 
-            const response3 = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=${units}`);
+            const response3 = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=${units}`,{mode: 'cors'});
             const data = await response3.json();
     
             if(!data.cnt){

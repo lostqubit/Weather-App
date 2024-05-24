@@ -1,4 +1,4 @@
-import {addSeconds} from "date-fns"
+import {format,addSeconds} from "date-fns"
 
 const dataLoader = (() => {
     const API_KEY = "84946dd5efaa6549cfd389a8db1f602b";
@@ -20,7 +20,7 @@ const dataLoader = (() => {
             const lat = cityDetails[0].lat;
             const lon = cityDetails[0].lon;
             
-            const response2 = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`);
+            const response2 = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=${units}`);
             const currentData = await response2.json();
 
             if(!currentData.weather.length){
@@ -45,7 +45,7 @@ const dataLoader = (() => {
             currentWeather = {
                 city: city,
                 country: country,
-                timestamp: addSeconds(currentTime,currentTime.getTimezoneOffset()*60+timeOffset),
+                timestamp: format(addSeconds(currentTime,currentTime.getTimezoneOffset()*60+timeOffset),"E hh:mm a"),
                 temperature: currentData.main,
                 weather: currentData.weather[0],
                 wind: currentData.wind,
@@ -58,7 +58,7 @@ const dataLoader = (() => {
                 forecast.push({
                     city: city,
                     country: country,
-                    timestamp: addSeconds(time,time.getTimezoneOffset()*60+timeOffset),
+                    timestamp: format(addSeconds(time,time.getTimezoneOffset()*60+timeOffset),"E hh:mm a"),
                     temperature: dataItem.main,
                     weather: dataItem.weather[0],
                     wind: dataItem.wind,
@@ -73,7 +73,7 @@ const dataLoader = (() => {
             error = e;
         }
 
-        return {error,currentWeather,forecast};
+        return {error:error,currentWeather:currentWeather,forecast:forecast};
     };
 
     return {getCurrentForecast};

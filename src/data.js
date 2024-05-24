@@ -19,6 +19,8 @@ const dataLoader = (() => {
     
             const lat = cityDetails[0].lat;
             const lon = cityDetails[0].lon;
+            const city = cityDetails[0].name;
+            const country = cityDetails[0].country;
             
             const response2 = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=${units}`);
             const currentData = await response2.json();
@@ -36,8 +38,6 @@ const dataLoader = (() => {
                 return null;
             }
     
-            const city = data.city.name;
-            const country = data.city.country;
             const timeOffset = data.city.timezone;
 
             const currentTime = new Date(currentData.dt*1000);

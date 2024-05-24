@@ -17,7 +17,7 @@ const display = (() => {
         document.querySelector(".loader").remove();
     }
 
-    const renderCurrentWeather = (currentWeather,currentPop) => {
+    const renderCurrentWeather = (currentWeather,currentPop,units) => {
         const wrapperDiv = document.createElement("div");
         wrapperDiv.classList.add("current-card");
 
@@ -49,7 +49,12 @@ const display = (() => {
         const h1 = document.createElement("h1");
         h1.innerText = Math.round(currentWeather.temperature.temp*100)/100;
         const h2 = document.createElement("h2");
-        h2.innerText = "\u00B0C";
+        if(units==="metric"){
+            h2.innerText = "\u00B0C";
+        }
+        else{
+            h2.innerText = "\u00B0F";
+        }
         const div5 = document.createElement("div");
         const weather = document.createElement("h3");
         weather.innerText = currentWeather.weather.main[0].toUpperCase() + currentWeather.weather.main.slice(1);
@@ -67,7 +72,12 @@ const display = (() => {
         const description = document.createElement("p");
         description.id = "description";
         description.innerText = currentWeather.weather.description[0].toUpperCase() + currentWeather.weather.description.slice(1);
-        description.innerText += `. The Low will be ${Math.round(currentWeather.temperature.temp_min*100)/100}\u00B0C.`
+        if(units==="metric"){
+            description.innerText += `. The Low will be ${Math.round(currentWeather.temperature.temp_min*100)/100}\u00B0C.`
+        }
+        else{
+            description.innerText += `. The Low will be ${Math.round(currentWeather.temperature.temp_min*100)/100}\u00B0F.`
+        }
         card.appendChild(description)
 
         const dataDiv = document.createElement("div");
@@ -77,7 +87,12 @@ const display = (() => {
         const windSpeedHeading = document.createElement("h4")
         windSpeedHeading.innerText = "Wind"
         const windSpeed = document.createElement("p");
-        windSpeed.innerText = `${Math.round(currentWeather.wind.speed*100)/100} m/s`;
+        if(units==="metric"){
+            windSpeed.innerText = `${Math.round(currentWeather.wind.speed*100)/100} m/s`;
+        }
+        else{
+            windSpeed.innerText = `${Math.round(currentWeather.wind.speed*100)/100} mph`;
+        }
         windSpeedDiv.appendChild(windSpeedHeading);
         windSpeedDiv.appendChild(windSpeed);
         dataDiv.appendChild(windSpeedDiv);
@@ -124,7 +139,7 @@ const display = (() => {
         return wrapperDiv;
     }
 
-    const loadHourlyForecast = (dataDiv,timeDiv,forecasts) => {
+    const loadHourlyForecast = (dataDiv,timeDiv,forecasts,units) => {
         
         for(let i=0;i<5;i++){
             const div = document.createElement("div");
@@ -159,7 +174,12 @@ const display = (() => {
             windImg.classList.add("wind");
             windImg.src = windIcon;
             const wind = document.createElement("p");
-            wind.innerText = `${Math.round(forecasts[i].wind.speed)} m/s`;
+            if(units==="metric"){
+                wind.innerText = `${Math.round(forecasts[i].wind.speed)} m/s`;
+            }
+            else{
+                wind.innerText = `${Math.round(forecasts[i].wind.speed)} mph`;
+            }
             windDiv.appendChild(windImg);
             windDiv.appendChild(wind);
             forecastDataDiv.appendChild(windDiv);
@@ -176,7 +196,7 @@ const display = (() => {
         }
     };
 
-    const loadDailyForecast = (dataDiv,timeDiv,forecasts) => {
+    const loadDailyForecast = (dataDiv,timeDiv,forecasts,units) => {
         for(let i=0;i<forecasts.length;i+=8){
             const div = document.createElement("div");
             const weatherIcon = document.createElement("img");
@@ -210,7 +230,12 @@ const display = (() => {
             windImg.classList.add("wind");
             windImg.src = windIcon;
             const wind = document.createElement("p");
-            wind.innerText = `${Math.round(forecasts[i].wind.speed)} m/s`;
+            if(units==="metric"){
+                wind.innerText = `${Math.round(forecasts[i].wind.speed)} m/s`;
+            }
+            else{
+                wind.innerText = `${Math.round(forecasts[i].wind.speed)} mph`;
+            }
             windDiv.appendChild(windImg);
             windDiv.appendChild(wind);
             forecastDataDiv.appendChild(windDiv);
@@ -226,13 +251,13 @@ const display = (() => {
         }
     };
 
-    const renderForecast = (currentWeather, forecasts) => {
+    const renderForecast = (currentWeather, forecasts, units) => {
         const currentPop = forecasts[0].pop;
 
         const heading1 = document.createElement("h3");
         heading1.innerText = `${forecasts[0].city}, ${forecasts[0].country}`
         
-        const currentContent = renderCurrentWeather(currentWeather,currentPop);
+        const currentContent = renderCurrentWeather(currentWeather,currentPop,units);
 
         const heading2 = document.createElement("h3");
         heading2.innerText = "Forecast";
@@ -258,7 +283,7 @@ const display = (() => {
         const timeDiv = document.createElement("div");
         timeDiv.classList.add("forecast-time");
         
-        loadHourlyForecast(dataDiv,timeDiv,forecasts);
+        loadHourlyForecast(dataDiv,timeDiv,forecasts,units);
         content.appendChild(dataDiv);
         content.appendChild(timeDiv);
         
@@ -269,7 +294,7 @@ const display = (() => {
             dailyTab.style.borderBottom = "none";
             dataDiv.innerHTML = "";
             timeDiv.innerHTML = "";
-            loadHourlyForecast(dataDiv,timeDiv,forecasts);
+            loadHourlyForecast(dataDiv,timeDiv,forecasts,units);
         });
 
         dailyTab.addEventListener("click", () => {
@@ -277,7 +302,7 @@ const display = (() => {
             hourlyTab.style.borderBottom = "none";
             dataDiv.innerHTML = "";
             timeDiv.innerHTML = "";
-            loadDailyForecast(dataDiv,timeDiv,forecasts);
+            loadDailyForecast(dataDiv,timeDiv,forecasts,units);
         });
         
         return {heading1,currentContent,heading2,forecastContent};
@@ -285,19 +310,77 @@ const display = (() => {
 
     const init = async () => {
         loadAnimation();
+        const cButton = document.querySelector("header>div:last-child>div:first-child");
+        const fButton = document.querySelector("header>div:last-child>div:last-child");
         const form = document.querySelector("#search");
+        let units = "metric";
+        let searchQuery ="New Delhi";
+
+        cButton.addEventListener("click", async () => {
+            fButton.style.border = "none";
+            cButton.style.border = "2px solid white";
+            const location = document.querySelector("#content-body>h3:first-child");
+            if(location){
+                if(units==="imperial"){
+                    loadAnimation();
+                    units = "metric";
+                    const data = await dataLoader.getCurrentForecast(searchQuery,units);
+                    if(data.error){
+                        stopAnimation();
+                        console.log("API down! Please Try Again");
+                    }
+                    else{
+                        const {heading1,currentContent,heading2,forecastContent} = renderForecast(data.currentWeather, data.forecast, units);
+                        stopAnimation();
+                        container.appendChild(heading1);
+                        container.appendChild(currentContent);
+                        container.appendChild(heading2);
+                        container.appendChild(forecastContent);
+                    }
+                }
+            }
+            else units = "metric";
+        });
+
+        fButton.addEventListener("click", async () => {
+            cButton.style.border = "none";
+            fButton.style.border = "2px solid white";
+            const location = document.querySelector("#content-body>h3:first-child");
+            if(location){
+                if(units==="metric"){
+                    loadAnimation();
+                    units = "imperial";
+                    const data = await dataLoader.getCurrentForecast(searchQuery,units);
+                    if(data.error){
+                        stopAnimation();
+                        console.log("API down! Please Try Again");
+                    }
+                    else{
+                        const {heading1,currentContent,heading2,forecastContent} = renderForecast(data.currentWeather, data.forecast, units);
+                        stopAnimation();
+                        container.appendChild(heading1);
+                        container.appendChild(currentContent);
+                        container.appendChild(heading2);
+                        container.appendChild(forecastContent);
+                    }
+                }
+            }
+            else units = "metric";
+        })
+
         form.addEventListener("submit", async (event) => {
             event.preventDefault();
             loadAnimation();
             const formdata = new FormData(event.target);
             const query = formdata.get("search-query");
-            const data = await dataLoader.getCurrentForecast(query);
+            const data = await dataLoader.getCurrentForecast(query,units);
+            searchQuery = query;
             if(data.error){
                 stopAnimation();
                 console.log("API down! Please Try Again");
             }
             else{
-                const {heading1,currentContent,heading2,forecastContent} = renderForecast(data.currentWeather, data.forecast);
+                const {heading1,currentContent,heading2,forecastContent} = renderForecast(data.currentWeather, data.forecast,units);
                 stopAnimation();
                 container.appendChild(heading1);
                 container.appendChild(currentContent);
@@ -307,8 +390,8 @@ const display = (() => {
             form.reset();
         });
 
-        // const data = await dataLoader.getCurrentForecast("New Delhi");
-        // const {heading1,currentContent,heading2,forecastContent} = renderForecast(data.currentWeather, data.forecast);
+        // const data = await dataLoader.getCurrentForecast("New Delhi",units);
+        // const {heading1,currentContent,heading2,forecastContent} = renderForecast(data.currentWeather, data.forecast,units);
         
         stopAnimation();
         // container.appendChild(heading1);

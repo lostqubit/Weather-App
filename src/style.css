@@ -60,6 +60,7 @@ header>div:last-child>div{
     width: 60px;
     font-weight: 700;
     background-color: #00072d;
+    cursor: pointer;
 }
 
 header>div:last-child>div:hover{

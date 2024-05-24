@@ -108,6 +108,7 @@ header>div:last-child>div:first-child{
 
 #content-body{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -139,4 +140,87 @@ header>div:last-child>div:first-child{
     100% {
       background-position: 0 50%, 50% 50%, 100% 50%;
     }
-  }
+}
+
+#content-body>h3{
+    font-weight: 600;
+    color: #dee2e6;
+    margin-bottom: 20px;
+}
+
+.current-card{
+    background: #0d47a1 none center center no-repeat fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.card-contents{
+    color: #dee2e6;
+    height: 210px;
+    width: 600px;
+    padding: 10px;
+    display: grid;
+    grid-template-rows: 1fr 2fr 1fr 1fr;
+    background-color: rgba(0, 0, 0, 0.4);
+
+}
+
+.card-contents p{
+    font-weight: 100;
+}
+
+.card-contents>div:first-child{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+#reload-btn{
+    height: 1.5rem;
+    cursor: pointer;
+}
+
+#current-temperature{
+    display: flex;
+}
+
+#currentWeather-icon{
+    display: block;
+    height: 8rem;
+    margin-top: -30px;
+    margin-left: -20px;
+}
+
+#current-temperature>div{
+    display:flex;
+    margin-left: -15px;
+}
+
+#current-temperature h1{
+    font-size: 3.25rem;
+}
+
+#current-temperature h2{
+    font-size: 2rem;
+    padding-top: 6px;
+}
+
+#current-temperature>div:last-child{
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    padding-top: 12px;
+    padding-left: 15px;
+}
+
+#description{
+    margin-top: -20px;
+}
+
+#data{
+    margin-top: -20px;
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+}

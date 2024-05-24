@@ -142,10 +142,17 @@ header>div:last-child>div:first-child{
     }
 }
 
-#content-body>h3{
+#content-body>h3:first-child{
     font-weight: 600;
     color: #dee2e6;
     margin-bottom: 20px;
+}
+
+
+#content-body>h3:nth-child(3){
+    font-weight: 600;
+    color: #dee2e6;
+    margin-top: 20px;
 }
 
 .current-card{
@@ -224,3 +231,103 @@ header>div:last-child>div:first-child{
     display: grid;
     grid-template-columns: repeat(5,1fr);
 }
+
+.forecast-card{
+    background-color: #0d47a1;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#forecast-content{
+    color: #dee2e6;
+    height: 210px;
+    width: 600px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: grid;
+    grid-template-rows: 1fr 5fr 1fr;
+}
+
+#forecast-content>div:first-child{
+    display: flex;
+    gap: 20px;
+}
+
+#forecast-content>div:first-child>p:first-child{
+    border-bottom: 2px solid white;
+}
+
+#forecast-content>div:first-child>p:hover{
+    border-bottom: 2px solid white;
+    cursor: pointer;
+}
+
+#forecast-data{
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+}
+
+#forecast-data>div{
+    display: flex;
+    flex-direction: column;
+    border-bottom: 2px solid rgba(108, 117, 125,0.5);
+    border-top: 2px solid rgba(108, 117, 125,0.5);
+}
+
+#forecast-data>div:nth-of-type(n+2){
+    border-left: 2px solid rgba(108, 117, 125,0.5);
+}
+
+#forecast-data>div>h4{
+    padding-left: 8px;
+}
+
+#forecast-data>div>p{
+    font-size: 0.9rem;
+    padding-left: 8px;
+}
+
+.forecast-icon{
+    height: 3rem;
+    width: 3rem;
+}
+
+#forecast-data>div>div{
+    padding-top: 15px;
+    padding-left: 8px;
+    padding-bottom: 10px;
+}
+
+.rain{
+    height: 1.2rem;
+}
+
+.rain-container{
+    font-size: 0.9rem;
+    display: flex;
+    gap: 5px;
+}
+
+.wind{
+    height: 1.2rem;
+}
+
+.wind-container{
+    font-size: 0.9rem;
+    display: flex;
+    gap: 5px;
+}
+
+.forecast-time{
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+}
+
+.forecast-time>p{
+    text-align: center;
+    font-size: 0.9rem;
+    padding-top: 10px;
+}
+
+
+

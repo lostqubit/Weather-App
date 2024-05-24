@@ -1,5 +1,7 @@
 import dataLoader from './data.js';
 import reloadIcon from './icons/reload.svg';
+import rainIcon from './icons/rain.svg';
+import windIcon from './icons/wind.svg';
 
 const display = (() => {
     const container = document.querySelector("#content-body");
@@ -127,12 +129,89 @@ const display = (() => {
     const renderForecast = (currentWeather, forecasts) => {
         const currentPop = forecasts[0].pop;
 
-        const heading = document.createElement("h3");
-        heading.innerText = `${forecasts[0].city}, ${forecasts[0].country}`
+        const heading1 = document.createElement("h3");
+        heading1.innerText = `${forecasts[0].city}, ${forecasts[0].country}`
         
         const currentContent = renderCurrentWeather(currentWeather,currentPop);
 
-        return {heading,currentContent};
+        const heading2 = document.createElement("h3");
+        heading2.innerText = "Forecast";
+
+        const forecastContent = document.createElement("div");
+        forecastContent.classList.add("forecast-card");
+        const content = document.createElement("div");
+        content.id = "forecast-content";
+
+        const nav = document.createElement("div");
+        const hourlyTab = document.createElement("p");
+        hourlyTab.innerText = "Hourly";
+        const dailyTab = document.createElement("p");
+        dailyTab.innerText = "Daily";
+        nav.appendChild(hourlyTab);
+        nav.appendChild(dailyTab);
+        content.appendChild(nav);
+
+        const dataDiv = document.createElement("div");
+        dataDiv.id = "forecast-data";
+        
+        for(let i=0;i<5;i++){
+            const div = document.createElement("div");
+            const weatherIcon = document.createElement("img");
+            weatherIcon.classList.add("forecast-icon");
+            weatherIcon.src = `https://openweathermap.org/img/wn/${forecasts[i].weather.icon}@2x.png`
+            div.appendChild(weatherIcon);
+            
+            const forecastTemperature = document.createElement("h4");
+            forecastTemperature.innerText = `${Math.round(forecasts[i].temperature.temp)}\u00B0`;
+            div.appendChild(forecastTemperature);
+
+            const forecastWeather = document.createElement("p");
+            forecastWeather.innerText = forecasts[i].weather.main;
+            div.appendChild(forecastWeather);
+
+            const forecastDataDiv = document.createElement("div");
+            const rainDiv = document.createElement("div");
+            rainDiv.classList.add("rain-container");
+            const rainImg = document.createElement("img");
+            rainImg.classList.add("rain");
+            rainImg.src = rainIcon;
+            const rain = document.createElement("p");
+            rain.innerText = `${forecasts[i].pop*100}%`;
+            rainDiv.appendChild(rainImg);
+            rainDiv.appendChild(rain);
+            forecastDataDiv.appendChild(rainDiv);
+            
+            const windDiv = document.createElement("div");
+            windDiv.classList.add("wind-container");
+            const windImg = document.createElement("img");
+            windImg.classList.add("wind");
+            windImg.src = windIcon;
+            const wind = document.createElement("p");
+            wind.innerText = `${Math.round(forecasts[i].wind.speed)} m/s`;
+            windDiv.appendChild(windImg);
+            windDiv.appendChild(wind);
+            forecastDataDiv.appendChild(windDiv);
+
+            div.appendChild(forecastDataDiv);
+            dataDiv.appendChild(div);
+        }
+
+        content.appendChild(dataDiv);
+
+        const timeDiv = document.createElement("div");
+        timeDiv.classList.add("forecast-time");
+        for(let i=0;i<5;i++){
+            const forecastTime = forecasts[i].timestamp.split(" ")[4].split(":").slice(0,2);
+            const time = document.createElement("p");
+            time.innerText = forecastTime[0]+":"+forecastTime[1];
+            timeDiv.appendChild(time);
+        }
+        
+        content.appendChild(timeDiv);
+
+        forecastContent.appendChild(content);
+        
+        return {heading1,currentContent,heading2,forecastContent};
     };
 
     const init = async () => {
@@ -190,11 +269,13 @@ const display = (() => {
         const testForecast = [];
         for(let i=0;i<40;i++) testForecast.push(test);
 
-        const {heading,currentContent} = renderForecast(test, testForecast);
+        const {heading1,currentContent,heading2,forecastContent} = renderForecast(test, testForecast);
         
         stopAnimation();
-        container.appendChild(heading);
+        container.appendChild(heading1);
         container.appendChild(currentContent);
+        container.appendChild(heading2);
+        container.appendChild(forecastContent);
     }
 
     return {init};

@@ -1,4 +1,5 @@
 import dataLoader from './data.js';
+import cityIcon from './icons/city.svg';
 import reloadIcon from './icons/reload.svg';
 import rainIcon from './icons/rain.svg';
 import windIcon from './icons/wind.svg';
@@ -20,6 +21,37 @@ const display = (() => {
     const renderCurrentWeather = (currentWeather,currentPop,units) => {
         const wrapperDiv = document.createElement("div");
         wrapperDiv.classList.add("current-card");
+        if(currentWeather.weather.main === "Thunderstorm"){
+            wrapperDiv.style.backgroundImage = "url(https://images.unsplash.com/photo-1571951842145-f204944c5674?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)";
+        }
+        else if (currentWeather.weather.main === "Drizzle"){
+            wrapperDiv.style.backgroundImage = "url(https://images.unsplash.com/photo-1654262306933-6a8df67b5c35?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)";
+        }
+        else if(currentWeather.weather.main === "Rain"){
+            wrapperDiv.style.backgroundImage = "url(https://images.unsplash.com/photo-1498847559558-1e4b1a7f7a2f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)";
+        }
+        else if(currentWeather.weather.main === "Snow"){
+            wrapperDiv.style.backgroundImage = "url(https://images.unsplash.com/photo-1457269449834-928af64c684d?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)";
+        }
+        else if(currentWeather.weather.icon === "50d"){
+            wrapperDiv.style.backgroundImage = "url(https://plus.unsplash.com/premium_photo-1669411924415-b951905f8943?q=80&w=1915&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)";
+        }
+        else if(currentWeather.weather.main === "Clear"){
+            if(currentWeather.weather.icon[currentWeather.weather.icon.length-1]==="d"){
+                wrapperDiv.style.backgroundImage = "url(https://images.unsplash.com/photo-1601297183305-6df142704ea2?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)";
+            }
+            else{
+                wrapperDiv.style.backgroundImage = "url(https://images.unsplash.com/photo-1608356349386-74c5e961fd37?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)";
+            }
+        }
+        else{
+            if(currentWeather.weather.icon[currentWeather.weather.icon.length-1]==="d"){
+                wrapperDiv.style.backgroundImage = "url(https://images.unsplash.com/photo-1626019866260-d9e0bb648634?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)";
+            }
+            else{
+                wrapperDiv.style.backgroundImage = "url(https://images.unsplash.com/photo-1531124320343-0b7949580211?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)";
+            }
+        }
 
         const card = document.createElement("div");
         card.classList.add("card-contents");
@@ -255,12 +287,14 @@ const display = (() => {
         const currentPop = forecasts[0].pop;
 
         const heading1 = document.createElement("h3");
-        heading1.innerText = `${forecasts[0].city}, ${forecasts[0].country}`
-        
-        const currentContent = renderCurrentWeather(currentWeather,currentPop,units);
+        const cityImg = document.createElement("img");
+        cityImg.src = cityIcon;
+        heading1.appendChild(cityImg);
+        const span = document.createElement("span");
+        span.innerText = `${forecasts[0].city}, ${forecasts[0].country}`
+        heading1.appendChild(span);
 
-        const heading2 = document.createElement("h3");
-        heading2.innerText = "Forecast";
+        const currentContent = renderCurrentWeather(currentWeather,currentPop,units);
 
         const forecastContent = document.createElement("div");
         forecastContent.classList.add("forecast-card");
@@ -269,12 +303,17 @@ const display = (() => {
         content.id = "forecast-content";
 
         const nav = document.createElement("div");
+        const navDiv = document.createElement("div");
         const hourlyTab = document.createElement("p");
         hourlyTab.innerText = "Hourly";
         const dailyTab = document.createElement("p");
         dailyTab.innerText = "Daily";
-        nav.appendChild(hourlyTab);
-        nav.appendChild(dailyTab);
+        navDiv.appendChild(hourlyTab);
+        navDiv.appendChild(dailyTab);
+        const navHeading = document.createElement("p");
+        navHeading.innerText = "Forecast";
+        nav.appendChild(navDiv);
+        nav.appendChild(navHeading);
         content.appendChild(nav);
 
         const dataDiv = document.createElement("div");
@@ -305,7 +344,7 @@ const display = (() => {
             loadDailyForecast(dataDiv,timeDiv,forecasts,units);
         });
         
-        return {heading1,currentContent,heading2,forecastContent};
+        return {heading1,currentContent,forecastContent};
     };
 
     const init = async () => {
@@ -330,11 +369,10 @@ const display = (() => {
                         console.log("API down! Please Try Again");
                     }
                     else{
-                        const {heading1,currentContent,heading2,forecastContent} = renderForecast(data.currentWeather, data.forecast, units);
+                        const {heading1,currentContent,forecastContent} = renderForecast(data.currentWeather, data.forecast, units);
                         stopAnimation();
                         container.appendChild(heading1);
                         container.appendChild(currentContent);
-                        container.appendChild(heading2);
                         container.appendChild(forecastContent);
                     }
                 }
@@ -356,11 +394,10 @@ const display = (() => {
                         console.log("API down! Please Try Again");
                     }
                     else{
-                        const {heading1,currentContent,heading2,forecastContent} = renderForecast(data.currentWeather, data.forecast, units);
+                        const {heading1,currentContent,forecastContent} = renderForecast(data.currentWeather, data.forecast, units);
                         stopAnimation();
                         container.appendChild(heading1);
                         container.appendChild(currentContent);
-                        container.appendChild(heading2);
                         container.appendChild(forecastContent);
                     }
                 }
@@ -380,24 +417,22 @@ const display = (() => {
                 console.log("API down! Please Try Again");
             }
             else{
-                const {heading1,currentContent,heading2,forecastContent} = renderForecast(data.currentWeather, data.forecast,units);
+                const {heading1,currentContent,forecastContent} = renderForecast(data.currentWeather, data.forecast,units);
                 stopAnimation();
                 container.appendChild(heading1);
                 container.appendChild(currentContent);
-                container.appendChild(heading2);
                 container.appendChild(forecastContent);
             }
             form.reset();
         });
 
-        // const data = await dataLoader.getCurrentForecast("New Delhi",units);
-        // const {heading1,currentContent,heading2,forecastContent} = renderForecast(data.currentWeather, data.forecast,units);
+        const data = await dataLoader.getCurrentForecast("New Delhi",units);
+        const {heading1,currentContent,forecastContent} = renderForecast(data.currentWeather, data.forecast,units);
         
         stopAnimation();
-        // container.appendChild(heading1);
-        // container.appendChild(currentContent);
-        // container.appendChild(heading2);
-        // container.appendChild(forecastContent);
+        container.appendChild(heading1);
+        container.appendChild(currentContent);
+        container.appendChild(forecastContent);
     }
 
     return {init};

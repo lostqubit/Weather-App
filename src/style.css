@@ -144,16 +144,30 @@ header>div:last-child>div:first-child{
 }
 
 #content-body>h3:first-child{
-    font-weight: 600;
+    font-weight: 500;
     color: #dee2e6;
     margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
 }
 
+#content-body>h3:first-child>img{
+    height:2rem;
+}
+
+#content-body>h3:first-child>span{
+    box-sizing: border-box;
+    padding-top: 3px;
+    display: block; 
+    font-size: 1.5rem;
+}
 
 #content-body>h3:nth-child(3){
-    font-weight: 600;
+    font-weight: 500;
     color: #dee2e6;
-    margin-top: 20px;
+    margin-top: 30px;
+    box-sizing: border-box;
+    padding-right: 540px;
 }
 
 .current-card{
@@ -168,10 +182,10 @@ header>div:last-child>div:first-child{
     color: #dee2e6;
     height: 210px;
     width: 600px;
-    padding: 10px;
+    padding: 15px 15px 10px 15px;
     display: grid;
     grid-template-rows: 1fr 2fr 1fr 1fr;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.5);
 
 }
 
@@ -235,7 +249,7 @@ header>div:last-child>div:first-child{
 
 .forecast-card{
     background-color: #0d47a1;
-    margin-top: 20px;
+    margin-top: 40px;
     margin-bottom: 20px;
 }
 
@@ -243,7 +257,7 @@ header>div:last-child>div:first-child{
     color: #dee2e6;
     height: 210px;
     width: 600px;
-    padding: 10px;
+    padding: 15px;
     background-color: rgba(0, 0, 0, 0.4);
     display: grid;
     grid-template-rows: 1fr 5fr 1fr;
@@ -251,14 +265,19 @@ header>div:last-child>div:first-child{
 
 #forecast-content>div:first-child{
     display: flex;
+    justify-content: space-between;
+}
+
+#forecast-content>div:first-child>div{
+    display: flex;
     gap: 20px;
 }
 
-#forecast-content>div:first-child>p:first-child{
+#forecast-content>div:first-child>div>p:first-child{
     border-bottom: 2px solid white;
 }
 
-#forecast-content>div:first-child>p:hover{
+#forecast-content>div:first-child>div>p:hover{
     border-bottom: 2px solid white;
     cursor: pointer;
 }

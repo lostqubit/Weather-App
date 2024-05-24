@@ -36,6 +36,9 @@ const display = (() => {
         else if(currentWeather.weather.icon === "50d"){
             wrapperDiv.style.backgroundImage = "url(https://plus.unsplash.com/premium_photo-1669411924415-b951905f8943?q=80&w=1915&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)";
         }
+        else if(currentWeather.weather.icon === "50n"){
+            wrapperDiv.style.backgroundImage = "url(https://images.unsplash.com/photo-1531124320343-0b7949580211?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)";
+        }
         else if(currentWeather.weather.main === "Clear"){
             if(currentWeather.weather.icon[currentWeather.weather.icon.length-1]==="d"){
                 wrapperDiv.style.backgroundImage = "url(https://images.unsplash.com/photo-1601297183305-6df142704ea2?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)";
@@ -347,6 +350,26 @@ const display = (() => {
         return {heading1,currentContent,forecastContent};
     };
 
+    const addReload = (query,units) => {
+        const button = document.querySelector("#reload-btn");
+
+        button.addEventListener("click", async () => {
+            loadAnimation();
+            const data = await dataLoader.getCurrentForecast(query,units);
+            if(data.error){
+                stopAnimation();
+                console.log("API down! Please Try Again");
+            }
+            else{
+                const {heading1,currentContent,forecastContent} = renderForecast(data.currentWeather, data.forecast,units);
+                stopAnimation();
+                container.appendChild(heading1);
+                container.appendChild(currentContent);
+                container.appendChild(forecastContent);
+            }
+        });
+    };
+
     const init = async () => {
         loadAnimation();
         const cButton = document.querySelector("header>div:last-child>div:first-child");
@@ -374,6 +397,7 @@ const display = (() => {
                         container.appendChild(heading1);
                         container.appendChild(currentContent);
                         container.appendChild(forecastContent);
+                        addReload(searchQuery,units);
                     }
                 }
             }
@@ -399,6 +423,7 @@ const display = (() => {
                         container.appendChild(heading1);
                         container.appendChild(currentContent);
                         container.appendChild(forecastContent);
+                        addReload(searchQuery,units);
                     }
                 }
             }
@@ -422,6 +447,7 @@ const display = (() => {
                 container.appendChild(heading1);
                 container.appendChild(currentContent);
                 container.appendChild(forecastContent);
+                addReload(searchQuery,units);
             }
             form.reset();
         });
@@ -433,6 +459,7 @@ const display = (() => {
         container.appendChild(heading1);
         container.appendChild(currentContent);
         container.appendChild(forecastContent);
+        addReload(searchQuery,units);
     }
 
     return {init};

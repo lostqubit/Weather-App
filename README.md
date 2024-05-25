@@ -5,3 +5,5 @@ A user friendly web based weather application built with JavaScript, HTML and CS
 live demo: https://lostqubit.github.io/Weather-App/
 
 ![image](https://github.com/lostqubit/Weather-App/assets/31575513/caef80e0-105f-4010-be72-53582b88613a)
+
+Work done as a part of "[The Odin Project](https://www.theodinproject.com/paths/full-stack-javascript)" Open Source curriculum.

@@ -16,7 +16,7 @@ body{
     /* background-color: #023e7d; */
     display: grid;
     grid-template-rows: 80px 1fr;
-    
+    overflow: auto;
 }
 
 header{
@@ -112,6 +112,7 @@ header>div:last-child>div:first-child{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow: auto;
 }
 
 .loader {
